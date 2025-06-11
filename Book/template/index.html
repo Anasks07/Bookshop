@@ -1,0 +1,74 @@
+{% load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    
+</head>
+<body>
+  <header class="index-header">
+    <div class="logo">BookFy</div>
+    
+    <div class="search-bar-container">
+        <form action="{% url 'search_query' %}" method="GET" class="search-form">
+        <input type="text" name="q" placeholder="Search"  class="search-input">
+        <button type="submit" class="search-button">
+        <img src="{% static 'images/magnifying-glass.png' %}" width="30" height="">
+        </button>
+      </form>
+    </div>
+
+    <nav class="nav-links">
+
+    <a href="{% url 'cart-view'  %}">
+      <img id="cart-icon" src="/media/cart-pic/cart-icon.jpg" alt="">
+    </a>
+    <!-- <a href="{% url 'orders'%}">Order</a> -->
+    </nav>
+    <div class="profile-icon">
+      {% if request.user.user_profile.profile_picture %}
+      <a href="{% url 'profile'%}">
+    <img id="user-pic" src="{{ request.user.user_profile.profile_picture.url }}" alt="">
+      </a>
+  {% else %}
+  <a href="{% url 'profile'%}">
+    <img id="default-pic" src="/media/default_profile_picture/default-pic.webp"alt="">
+  </a>
+  {% endif %}
+    </div>
+  </header>
+<!-- 
+  <div class="index-header">
+
+    {% if request.user.profile_picture %}
+    <img src="{{ request.user.profile_picture.url }}" alt="">
+  {% else %}
+    <img id="default-pic" src="/media/default_profile_picture/default-pic.webp"alt="">
+  {% endif %}
+
+    <h1 style="color:aliceblue">{{request.user}}</h1>
+    <a href="{% url 'logout'%}">Logout</a>
+    <a href="{% url 'cart-view'  %}">Cart</a>
+    <a href="{% url 'orders'%}">Order</a>
+  </div> -->
+    
+    <div class="book-container">
+        {% for item in product %}
+          <div class="book-card">
+            <a href="{% url 'product-detail' item.id  %}">
+            <img src="{{ item.photo.url }}" alt="{{ item.title }}" class="book-img">
+            </a>
+            <h3>{{ item.title }}</h3>
+            <span class="genre">{{ item.genre }}</span>
+            <p class="price">{{ item.price }} rs</p><br>
+            <!-- <a href="{% url 'add-to-cart' item.id %}" class="add-to-cart">Add To Cart</a> -->
+
+          </div>
+        {% endfor %}
+      </div>
+</body>
+
+</html>

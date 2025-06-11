@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Orders</h2>
+
+{% for order in orders %}
+    <div style="border:1px solid #ccc; padding:10px; margin:10px 0; font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif" >
+        <p><strong>Order ID:</strong> {{ order.id }}</p>
+        <p>
+            <strong>Status:</strong> 
+            <span class="status-{{ order.status }}" >
+              {{ order.get_status_display }}
+            </span>
+          </p>
+        <p ><strong>Total Price:</strong> rs {{ order.total_price }}</p>
+        <p><strong>Date:</strong> {{ order.created_at }}</p>
+        <p><strong>Quantity:</strong> {{item.quantity }}</p>
+
+
+        
+        
+        <ul>
+            {% for item in order.items.all %}
+                <li>
+                    {{ item.item.title }} - Quantity: {{ item.quantity }} - Price: rs {{ item.price }}
+                </li>
+            {% empty %}
+            <!-- {{ item.item.title }} - Quantity: {{ item.quantity }} - Price: rs {{ item.price }} -->
+            {% endfor %}
+        </ul>
+    </div>
+{% empty %}
+    <p>You have no orders.</p>
+{% endfor %}
+
+</body>
+</html>

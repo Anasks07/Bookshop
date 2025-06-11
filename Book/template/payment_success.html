@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Payment Successful!</h2>
+    <p>Order ID: {{ order.id }}</p>
+    <p>Amount Paid: ₹{{ order.total_price }}</p>
+    <p>Payment ID: {{ order.razorpay_payment_id }}</p>
+
+    <a href="{% url 'index' %}">Back to Home</a>
+
+</body>
+</html>

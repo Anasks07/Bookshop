@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {%load static%}
+
+    <title>Document</title>
+    <style>
+         body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f2f2f2;
+            font-family: Arial, sans-serif;
+        }
+
+    </style>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="register-container">
+    <form action="{% url 'register'%}" method="POST">
+        {%csrf_token%}
+        <input type="text" name="username" id="register-username" value="{{ username|default:'' }}"  placeholder="Username"><br><br>
+
+        <input type="email" name="email" id="register-useremail" placeholder="Email"> <br><br>
+        <input type="password" name="password" id="register-userpassword"  placeholder="Password"><br><br>
+        <h4>Already have account ? <a href="{% url 'login'%}">login</a></h4>
+        <button type="submit" id="register-btn">Sign In</button>
+    </form>
+    {%if messages%}
+    {% for message in messages %}
+   <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+   {% endfor %}
+    {% endif %}
+    </div>
+</body>
+</html>

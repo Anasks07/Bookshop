@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+ <body>
+    <div class="search-container">
+{% if product %}
+    {% for book in product %}
+        <a href="{% url 'product-detail' book.id %}"><h2>{{ book.title }}</h2></a><br><br>
+    {% endfor %}
+{% else %}
+    <h2>Not found.</h2>
+{% endif %}
+</div>
+
+
+
+<!--     
+{% for book in product%}
+{% if book.item in product%}
+<a href="{% url 'book.item.id'%}">{{book.item.title}}</a>
+{%else%}
+<h2>Not found.</h2>
+{%endif%}
+{%endfor%} --> 
+</body>
+</html>

@@ -1,0 +1,135 @@
+{% load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="{% static 'javascript/script.js' %}"></script>
+    <title>Document</title>
+</head>
+<body>
+   
+        <div class="cart-container">
+          
+            {% for cart_item in cart_obj%}
+          <div class="cart-item">
+            <img id="cart-product-image" src="{{cart_item.item.photo.url}}" alt="">
+            <h2 id="title">{{cart_item.item.title}}</h2>
+            <h3 id="genre">{{cart_item.item.genre}}</h3><br><br>
+            <!-- <h3 id="price" data-unit-price="{{ cart_item.item.price }}">{{ cart_item.item.price }} rs</h3> -->
+            <!-- <h3 id="price">{{cart_item.item.price}} rs</h3> -->
+            <form method="POST" action="{% url 'update-quantity' %}" class="quantity-form">
+                {% csrf_token %}
+              
+                <div>
+                  <span class="price" data-unit-price="{{ cart_item.item.price }}">{{ cart_item.item.price }} rs</span><br><br>
+                  
+                  <input type="number" class="quantity-input" name="quantity" value="{{ cart_item.quantity }}" min="1" readonly><br>
+
+                  <button type="button" onclick="changeQuantity(this,1)">+</button>
+                  <button type="button" onclick="changeQuantity(this,-1)">–</button>
+                  
+                  
+                  
+                  
+                  
+                </div>
+                <!-- <span class="price" data-unit-price="{{ cart_item.item.price }}">{{ cart_item.item.price }} rs</span> -->
+
+              
+                <input type="hidden" name="cart_item_id" value="{{ cart_item.id }}">
+                <br>
+              
+              </form>
+              
+              <!-- <form method="POST" action="{% url 'place-order' %}" onsubmit="syncQuantity(this)"> -->
+              <form method="GET" action="{% url 'payment-page' %}" onsubmit="syncQuantity(this)">
+  
+                {% csrf_token %}
+                <input type="hidden" name="cart_item_id" value="{{ cart_item.id }}">
+                <input type="hidden" name="quantity" class="sync-quantity">
+                <input type="hidden" name="total_price" class="sync-price">
+                <button type="submit" id="order-btn">Buy</button>
+              </form>
+              <br>
+              <form method="POST" action="{% url 'remove-from-cart' cart_item.id %}">
+                {% csrf_token %}
+                <button type="submit" id="remove-cart-btn">Remove from cart</button>
+              </form>
+            <br><br><br>
+            <hr>
+          </div>
+            {% endfor %}
+            
+        </div>
+        
+    </div>
+
+    <script>
+    function changeQuantity(btn, delta) {
+    const input = btn.parentElement.querySelector(".quantity-input");
+    let quantity = parseInt(input.value) || 1;
+    quantity = Math.max(1, quantity + delta);
+    input.value = quantity;
+  }
+  function syncQuantity(form) {
+   const cartItem = form.closest('.cart-item');
+    const quantityInput = cartItem.querySelector(".quantity-input");
+    const syncInput = form.querySelector(".sync-quantity");
+    const priceElement = cartItem.querySelector(".price");
+    const pricePerUnit = parseFloat(priceElement.dataset.unitPrice);
+    const totalPriceInput = form.querySelector(".sync-price");
+
+    const quantity = parseInt(quantityInput.value);
+    syncInput.value = quantity;
+    totalPriceInput.value = (pricePerUnit * quantity).toFixed(2);
+  }
+  
+</script>
+    
+    <!-- <script>
+      function syncQuantity(orderForm) {
+        const cartItem = orderForm.closest(".cart-item"); // Wrap both forms in a container
+        const quantityInput = cartItem.querySelector(".quantity-input");
+        const hiddenQuantity = orderForm.querySelector(".sync-quantity");
+      
+        hiddenQuantity.value = quantityInput.value;
+      }
+    </script> -->
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

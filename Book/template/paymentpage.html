@@ -1,0 +1,41 @@
+{% load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>payment</title>
+</head>
+<body>
+  
+  <div class="payment-container">
+    <h2>Choose Payment Method</h2>
+
+    <div class="order-summary">
+      <p><strong>Quantity:</strong> {{ quantity }}</p>
+      <p><strong>Total Price:</strong> {{ total_price }} ₹</p>
+    </div>
+    <form method="POST" action="{% url 'place-order' %}">
+      {% csrf_token %}
+      <input type="hidden" name="cart_item_id" value="{{ cart_item_id }}">
+      <input type="hidden" name="quantity" value="{{ quantity }}">
+      <input type="hidden" name="total_price" value="{{ total_price }}">
+      <input type="hidden" name="payment_method" value="cod">
+      <button type="submit" class="cod-btn">Cash on Delivery</button>
+    </form>
+    <br>
+    <form method="POST" action="{% url 'place-order' %}">
+      {% csrf_token %}
+      <input type="hidden" name="cart_item_id" value="{{ cart_item_id }}">
+      <input type="hidden" name="quantity" value="{{ quantity }}">
+      <input type="hidden" name="total_price" value="{{ total_price }}">
+      <input type="hidden" name="payment_method" value="online">
+      <button type="submit" class="online-btn">Pay Online</button>
+    </form>
+  </div>
+
+
+
+</body>
+</html>

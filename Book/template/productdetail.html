@@ -1,0 +1,89 @@
+{% load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        body{
+            background-color: rgb(249, 249, 249);
+        }
+    </style>
+    <title>Post Detail</title>
+</head>
+<body>
+     <a href="{% url 'cart-view'  %}">
+      <img id="cart-icon" src="/media/cart-pic/cart-icon.jpg" alt="">
+    </a>
+
+    <div class="product-detail-section">
+        <div class="cart-section">
+            {% if messages %}
+        <ul class="messages">
+          {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+              {{ message }}
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+        
+        <div class="product-detail-container">
+            <img id="product-detail-image" src="{{book_obj.photo.url}}" alt="">
+            <div class="content">
+            <h2 id="title">{{book_obj.title}}</h2>
+            <h3 id="genre">{{book_obj.genre}}</h3>
+            <h3 id="price">{{book_obj.price}} rs</h3>
+            <br>
+            <a href="#" class="add-cart" data-id="{{ book_obj.id }}">Add Cart</a>
+            <p id="cart-message" style="font-weight: bold;"></p>
+            <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+            </div>
+            
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const cartLink = document.querySelector('.add-cart');
+            const messageBox = document.getElementById('cart-message');
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value; // ✅ Put it here
+        
+            if (cartLink) {
+                cartLink.addEventListener('click', function (e) {
+                    e.preventDefault();  // ✅ Prevent default anchor navigation
+        
+                    const productId = this.getAttribute('data-id');
+        
+                    fetch(`/add-to-cart/${productId}/`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': csrfToken, // ✅ Include CSRF token in header
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({})
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        messageBox.textContent = data.message;
+                        messageBox.style.color = data.status === 'success' ? 'green' : 'orange';
+                    })
+                    .catch(error => {
+                        messageBox.textContent = 'Something went wrong.';
+                        messageBox.style.color = 'red';
+                        console.error('Error:', error);
+                    });
+                });
+            }
+        });
+    </script>
+   
+</body>
+</html>
+
+
+
+
+
